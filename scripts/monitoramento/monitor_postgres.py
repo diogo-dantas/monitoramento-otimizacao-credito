@@ -57,8 +57,4 @@ class PostgresMetricsCollector:
 		if self.conn:
 			self.conn.close()
 
-if __name__ == "__main__":
-	collector = PostgresMetricsCollector(
-		dbname = bank_customers
-		)
 
