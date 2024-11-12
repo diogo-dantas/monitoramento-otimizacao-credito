@@ -42,7 +42,23 @@ class QueryOptimizer:
 		finally:
 			self._cleanup()
 
-		# def _build_explain_query(self, query: str) -> str:
+		def _build_explain_query(self, query: str) -> str:
+			""" 
+			Constrói a query EXPLAIN ANALYZE
+
+
+			Args:
+				query: Query SQL original
+
+			Returns:
+
+				query com EXPLAIN ANALYZE
+			"""
+
+			return f"""
+			EXPLAIN (FORMAT JSON, ANALYZE, BUFFERS, COSTS, TIMING)
+			{query.strip()}
+			"""
 
 		def _cleanup(self):
 			""" Fecha o cursor se estiver aberto."""
