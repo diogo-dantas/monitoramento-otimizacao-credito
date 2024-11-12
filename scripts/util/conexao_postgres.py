@@ -37,3 +37,24 @@ class PostgresDatabase:
         """
         self.config = config
         self._conn = None
+
+    def connect(self) -> None:
+        """
+        Estabelece conexão com o banco de dados.
+        
+        Raises:
+            DatabaseError: Se houver erro na conexão
+        """
+        try:
+            self._conn = psycopg2.connect(
+                dbname=self.config.dbname,
+                user=self.config.user,
+                password=self.config.password,
+                host=self.config.host,
+                port=self.config.port
+            )
+            logger.info("Conexão com o PostgreSQL estabelecida com sucesso!")
+        except Exception as e:
+            error_msg = f"Erro ao conectar ao PostgreSQL: {str(e)}"
+            logger.error(error_msg)
+            raise DatabaseError(error_msg)
