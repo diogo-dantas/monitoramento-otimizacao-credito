@@ -86,7 +86,23 @@ class QueryOptimizer:
 
 			return suggestions
 
-		# def _extract_execution_time(self, execution_plan: List[tuple]) -> float:
+		def _extract_execution_time(self, execution_plan: List[tuple]) -> float:
+			"""
+			Extrai o tempo total de execução do plano.
+
+			Args:
+				execution_plan: Resultado da análise EXPLAIN ANALYSE
+
+			Returns:
+				Tempo de execução em milisegundos
+			"""
+			try:
+				for row in execution_plan:
+					if 'Execution Time' in str(row):
+						return float(str(row).split(':')[1].strip().replace('ms', ''))
+			except Exception:
+				return 0.0		
+
 		# def _has_sequential_scan(self, execution_plan: List[tuple]) -> bool:
 
 		def _cleanup(self):
