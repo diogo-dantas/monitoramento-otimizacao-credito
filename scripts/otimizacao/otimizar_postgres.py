@@ -60,6 +60,35 @@ class QueryOptimizer:
 			{query.strip()}
 			"""
 
+		def get_optimization_suggestions(self, execution_plan: List[tuple]) -> List[str]:
+			"""
+			Analisa o plano de execução e retorna sugestões de otimização.
+
+			Args:
+				execution_plan: Resultado da EXPLAIN ANALYZE
+
+			Returns:
+				Lista de sugestões para otimização
+			"""
+			suggestions = []
+
+			if not execution_plan:
+				return ["Não foi possível gerar sugestões: plano de execução vazio."]
+
+			# Analisa o tempo total de execução
+			execution_time = self._extract_execution_time(execution_plan)
+			if execution_time > 1000:  # mais de 1 segundo
+				suggestions.append(f"Query demorada: {execution_time:.2f}ms. Considere criar índices apropriados.")
+
+			# Identifica operações de sequential scan
+			if self._has_sequential_scan(execution_plan)	:
+				suggestions.append("Detectado Sequential Scan. Considere criar índices apropriados.")
+
+			return suggestions
+
+		# def _extract_execution_time(self, execution_plan: List[tuple]) -> float:
+		# def _has_sequential_scan(self, execution_plan: List[tuple]) -> bool:
+
 		def _cleanup(self):
 			""" Fecha o cursor se estiver aberto."""
 			if self.cursor:
