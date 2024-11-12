@@ -19,3 +19,33 @@ class QueryOptimizer:
 	self.conn = connection
 	self.cursor = None
 
+	def analyze_query(self, query: str) -> Optional[List[tuple]]:
+		"""
+		Analisa e explica o plano de execução de uma query.
+
+		Args:
+			query SQL a ser analisada
+
+		Returns:
+			Lista com o resultado da análise ou None em caso de erro.
+		"""
+		try:
+			self.cursor = self.conn.cursor()
+			explain_query = self._build_explain_query(query)
+			self.cursor.execute(explain_query)
+			return self.cursor.fetchall()
+
+		except Exception as e:
+			logger.error(f"Erro ao analisar query: {str(e)}") 
+			return	None
+
+		finally:
+			self._cleanup()
+
+		# def _build_explain_query(self, query: str) -> str:
+
+		def _cleanup(self):
+			""" Fecha o cursor se estiver aberto."""
+			if self.cursor:
+				self.cursor.close()
+
