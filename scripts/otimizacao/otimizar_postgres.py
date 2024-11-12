@@ -103,7 +103,17 @@ class QueryOptimizer:
 			except Exception:
 				return 0.0		
 
-		# def _has_sequential_scan(self, execution_plan: List[tuple]) -> bool:
+		def _has_sequential_scan(self, execution_plan: List[tuple]) -> bool:
+			"""
+			Verifica se há Sequential Scan no plano de execução.
+
+			Args:
+				execution_plan: Resultado da análise EXPLAIN ANALYSE
+
+			Returns:
+				True se encontrar Sequential Scan, False caso contrário.
+			"""
+			return any('Seq Scan' in str(row) for row in execution_plan)
 
 		def _cleanup(self):
 			""" Fecha o cursor se estiver aberto."""
