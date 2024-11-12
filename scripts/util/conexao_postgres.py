@@ -58,3 +58,10 @@ class PostgresDatabase:
             error_msg = f"Erro ao conectar ao PostgreSQL: {str(e)}"
             logger.error(error_msg)
             raise DatabaseError(error_msg)
+            
+    def close(self) -> None:
+        """Fecha a conexão com o banco de dados."""
+        if self._conn:
+            self._conn.close()
+            self._conn = None
+            logger.info("Conexão com o PostgreSQL encerrada com sucesso.")
